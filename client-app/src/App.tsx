@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './styles/css/App.css';
 import { Route, Routes} from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -11,9 +11,15 @@ import Register from "./pages/Auth/Register";
 import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
+import Settings from "./pages/Settings";
 
 function App() {
     const activeMenu = true;
+    const [settingsPage, setSettingsPage] = useState(true);
+
+    const handleSettingsClose = () => {
+        setSettingsPage(false);
+    }
     return (
         <div>
 
@@ -31,6 +37,7 @@ function App() {
 
 
                         <div>
+                            {settingsPage && <Settings onClose={handleSettingsClose} /> }
                             <Routes>
                                 <Route path="/" element={<Portfolio/>}/>
                                 <Route path="/investments" element={<Investments/>}/>
