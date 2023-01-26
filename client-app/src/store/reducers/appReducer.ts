@@ -2,13 +2,13 @@ import produce from 'immer';
 import {ActionType} from "../action-types";
 import {Action} from '../actions';
 
-const initialState = {
+export const appInitialState = {
     extraPage: '',
     currentPage: 'Portfolio'
 }
 
 const reducer = produce(
-    (state = initialState, action: Action) => {
+    (state = appInitialState, action: Action) => {
         switch(action.type){
             case ActionType.OPEN_EXTRA_PAGE:
                 const {page} = action.payload;

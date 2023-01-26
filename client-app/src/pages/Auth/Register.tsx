@@ -1,10 +1,11 @@
-import {Link, useNavigate} from "react-router-dom";
-import axios from '../../api/axios';
+import { useNavigate} from "react-router-dom";
+import axios, {csrf} from '../../api/axios';
 import React, {useState} from "react";
 import Panel from "../../components/Auth/Panel";
 import AuthError from "../../components/Auth/AuthError";
 import {isAxiosError} from "axios";
 import Input from "../../components/Auth/Input";
+import {useActions} from "../../hooks/use-action";
 
 interface RegisterProps {
     showComponent: (component: string) => void
@@ -18,23 +19,26 @@ const Register: React.FC<RegisterProps> = ({showComponent}) => {
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [errors, setErrors] = useState<AuthError>({});
     const navigate = useNavigate();
+    const {register} = useActions();
 
     const handleRegister = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        try {
-            await axios.post('/register', {
-                name, email, password, password_confirmation: passwordConfirmation
-            });
-            setName('');
-            setEmail('');
-            setPassword('');
-            setPasswordConfirmation('');
-            navigate('/');
-        } catch (error) {
-            if (isAxiosError(error)) {
-                setErrors(error.response?.data.errors);
-            }
-        }
+        // await csrf();
+        // try {
+        //     await axios.post('/register', {
+        //         name, email, password, password_confirmation: passwordConfirmation
+        //     });
+        //     setName('');
+        //     setEmail('');
+        //     setPassword('');
+        //     setPasswordConfirmation('');
+        //     navigate('/');
+        // } catch (error) {
+        //     if (isAxiosError(error)) {
+        //         setErrors(error.response?.data.errors);
+        //     }
+        // }
+        register(name, email, password, passwordConfirmation);
     }
 
     return (

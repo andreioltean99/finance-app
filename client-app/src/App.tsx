@@ -10,12 +10,8 @@ function App() {
         return state.auth;
     });
 
-    console.log(auth);
-
-
-
     let layout;
-    if (auth.user || auth.guest) {
+    if (!auth.errors && (auth.user || auth.guest)) {
         layout = <AppLayout/>
     } else {
         layout = <AuthLayout/>

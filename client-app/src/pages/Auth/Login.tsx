@@ -1,11 +1,9 @@
-import {Link, useNavigate} from "react-router-dom";
-import axios, {csrf} from '../../api/axios';
 import React, {useState} from "react";
 import Panel from "../../components/Auth/Panel";
-import {isAxiosError} from "axios";
 import Input from "../../components/Auth/Input";
-import AuthError from "../../components/Auth/AuthError";
 import Button from "../../components/Auth/Button";
+import {useActions} from "../../hooks/use-action";
+import {useTypedSelector} from "../../hooks/use-typed-selector";
 
 interface LoginProps {
     showComponent: (component: string) => void
@@ -14,25 +12,16 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({showComponent}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState<AuthError>({});
-    const navigate = useNavigate();
+
+    const {login, guestLogin} = useActions();
+    const errors = useTypedSelector((state) => {
+        return state.auth.errors;
+    })
 
 
     const handleLogin = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // await csrf();
-        // try {
-        //     await axios.post('/login', {
-        //         email, password
-        //     });
-        //     setEmail('');
-        //     setPassword('');
-        //     navigate('/');
-        // } catch (error) {
-        //     if (isAxiosError(error)) {
-        //         setErrors(error.response?.data.errors);
-        //     }
-        // }
+        login(email, password);
     }
 
     return (
@@ -64,7 +53,13 @@ const Login: React.FC<LoginProps> = ({showComponent}) => {
                           className="text-primary hover:underline cursor-pointer"
                     >Sign Up</span>
                 </div>
-                <Button type="submit" className="bg-orange-500 hover:bg-orange-600 mt-16">Login as GUEST</Button>
+                <Button
+                    type="button"
+                    className="bg-orange-500 hover:bg-orange-600 mt-16"
+                    onClick={() => {
+                        guestLogin()
+                    }}
+                >Login as GUEST</Button>
             </>
         </Panel>
     )
