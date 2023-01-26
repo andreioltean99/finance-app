@@ -6,7 +6,11 @@ import React, {useState} from "react";
 import AuthError from "../../components/Auth/AuthError";
 import {isAxiosError} from "axios";
 
-const ForgotPassword = () => {
+interface ForgotPasswordProps{
+    showComponent: (component: string) => void
+}
+
+const ForgotPassword: React.FC<ForgotPasswordProps> = ({showComponent}) => {
     const [email, setEmail] = useState('');
     const [errors, setErrors] = useState<AuthError>({});
     const [status, setStatus] = useState(null);
@@ -42,6 +46,10 @@ const ForgotPassword = () => {
 
                     <Button type="submit">Submit</Button>
                 </form>
+                <div>
+                    <p className="text-base text-[#adadad] inline-block px-3 cursor-pointer" onClick={ () => {showComponent('login')} }>Back to login</p>
+
+                </div>
             </>
         </Panel>
     )

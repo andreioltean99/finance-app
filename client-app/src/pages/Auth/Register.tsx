@@ -6,7 +6,12 @@ import AuthError from "../../components/Auth/AuthError";
 import {isAxiosError} from "axios";
 import Input from "../../components/Auth/Input";
 
-const Login = () => {
+interface RegisterProps {
+    showComponent: (component: string) => void
+}
+
+const Register: React.FC<RegisterProps> = ({showComponent}) => {
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -71,13 +76,13 @@ const Login = () => {
                 </form>
                 <div>
                     <p className="text-base text-[#adadad] inline-block px-3"> Are you a member?</p>
-                    <Link to="/login"
-                          className="text-primary hover:underline"
-                    >Login</Link>
+                    <span onClick={() => {showComponent('login')} }
+                          className="text-primary hover:underline cursor-pointer"
+                    >Login</span>
                 </div>
             </>
         </Panel>
     )
 }
 
-export default Login;
+export default Register;

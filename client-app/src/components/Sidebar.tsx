@@ -5,9 +5,15 @@ import {RiStockLine} from "react-icons/ri";
 import {GiMoneyStack} from "react-icons/gi";
 import React, {useState} from "react";
 import {FiSettings} from "react-icons/fi";
+import {useActions} from "../hooks/use-action";
+import {useTypedSelector} from "../hooks/use-typed-selector";
 
 const Sidebar = () => {
-    const [activeId, setActiveId] = useState(null);
+    const {openExtraPage} = useActions();
+    const currentPage = useTypedSelector((state) => {
+        return state.app.currentPage;
+    });
+    const {setCurrentPage} = useActions();
 
     return (
         <div className="ml-2 h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto">
@@ -21,14 +27,13 @@ const Sidebar = () => {
                     </Link>
                 </div>
                 <div className="">
-                    <div className="mt-8">
+                    <div className="mt-8 ">
                         <Link
                             to="/"
-                            id="portfolioBtn"
-                            onClick={(e) => {console.log(e.currentTarget.id)} }
+                            onClick={(e) => {setCurrentPage('Portfolio');}}
                             className="text-slate-900"
                         >
-                            <div className={`rounded p-3 mr-2 hover:bg-blue-200 `}>
+                            <div className={`rounded p-3 mr-2 hover:bg-blue-200 ${currentPage === 'Portfolio' ? 'bg-blue-200' : '' }`}>
                                 <BsWallet2 size={20}/>
                             </div>
                         </Link>
@@ -39,8 +44,9 @@ const Sidebar = () => {
                         <Link
                             to="/investments"
                             className="text-slate-900"
+                            onClick={(e) => {setCurrentPage('Investments');}}
                         >
-                            <div className="rounded p-3 mr-2 hover:bg-blue-200">
+                            <div className={`rounded p-3 mr-2 hover:bg-blue-200 ${currentPage === 'Investments' ? 'bg-blue-200' : '' }`}>
                                 <RiStockLine size={20}/>
                             </div>
                         </Link>
@@ -51,26 +57,19 @@ const Sidebar = () => {
                         <Link
                             to="/budget-planner"
                             className="text-slate-900"
+                            onClick={(e) => {setCurrentPage('Budget Planner');}}
                         >
-                            <div className="rounded p-3 mr-2 hover:bg-blue-200">
+                            <div className={`rounded p-3 mr-2 hover:bg-blue-200 ${currentPage === 'Budget Planner' ? 'bg-blue-200' : '' }`}>
                                 <GiMoneyStack size={20}/>
                             </div>
                         </Link>
                     </div>
                 </div>
-                <div className="fixed left-2 bottom-6">
-
-                    <Link
-                        to="/"
-                        onClick={() => {
-                        }}
-                        className="text-slate-900"
-                    >
-                        <div className="rounded p-3 hover:bg-blue-200">
-                            <FiSettings size={20}/>
-                        </div>
-                    </Link>
-
+                <div className="fixed left-2 bottom-6 text-slate-900"
+                     onClick={() => {openExtraPage('settings')}}>
+                    <div className="rounded p-3 hover:bg-blue-200">
+                        <FiSettings size={20}/>
+                    </div>
                 </div>
             </>
         </div>
