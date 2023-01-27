@@ -1,4 +1,5 @@
 import {ActionType} from "../action-types";
+import User from "../types/User";
 
 export interface OpenExtraPageAction {
     type: ActionType.OPEN_EXTRA_PAGE;
@@ -18,12 +19,18 @@ export interface SetCurrentPageAction {
     }
 }
 
-export interface LoginAction {
-    type: ActionType.LOGIN;
+export interface LoginPendingAction {
+    type: ActionType.LOGIN_PENDING;
+}
+
+export interface LoginFulfilledAction {
+    type: ActionType.LOGIN_FULFILLED;
+}
+
+export interface LoginRejectedAction {
+    type: ActionType.LOGIN_REJECTED;
     payload: {
-        email: string,
-        password: string
-        errors: [] | null
+        errors: []
     }
 }
 
@@ -42,21 +49,39 @@ export interface LogoutAction {
     type: ActionType.LOGOUT;
 }
 
-export interface GetUserAction {
-    type: ActionType.GET_USER;
+export interface GetUserPendingAction {
+    type: ActionType.GET_USER_PENDING;
+}
+
+export interface GetUserFulfilledAction {
+    type: ActionType.GET_USER_FULFILLED;
+    payload: User
+}
+
+export interface GetUserErrorAction {
+    type: ActionType.GET_USER_ERROR;
 }
 
 export interface GuestLoginAction {
     type: ActionType.GUEST_LOGIN;
 }
 
+export interface ResetAuthErrorsAction {
+    type: ActionType.RESET_AUTH_ERRORS;
+}
+
 export type Action =
     OpenExtraPageAction
     | CloseExtraPageAction
     | SetCurrentPageAction
-    | LoginAction
+    | LoginPendingAction
+    | LoginFulfilledAction
+    | LoginRejectedAction
     | RegisterAction
     | LogoutAction
-    | GetUserAction
+    | GetUserPendingAction
+    | GetUserFulfilledAction
     | GuestLoginAction
+    | ResetAuthErrorsAction
+    | GetUserErrorAction
     ;

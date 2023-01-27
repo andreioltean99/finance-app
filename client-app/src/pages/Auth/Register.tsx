@@ -1,43 +1,34 @@
-import { useNavigate} from "react-router-dom";
-import axios, {csrf} from '../../api/axios';
-import React, {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from "react";
 import Panel from "../../components/Auth/Panel";
 import AuthError from "../../components/Auth/AuthError";
-import {isAxiosError} from "axios";
 import Input from "../../components/Auth/Input";
 import {useActions} from "../../hooks/use-action";
+import {useTypedSelector} from "../../hooks/use-typed-selector";
 
-interface RegisterProps {
-    showComponent: (component: string) => void
-}
-
-const Register: React.FC<RegisterProps> = ({showComponent}) => {
+const Register: React.FC = () => {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
-    const [errors, setErrors] = useState<AuthError>({});
-    const navigate = useNavigate();
+
+    const {resetAuthErrors} = useActions();
+
+    const errors = useTypedSelector((state) => {
+        return state.auth.errors;
+    });
+
+    useEffect(() => {
+        if(errors) {
+            resetAuthErrors();
+        }
+    }, [])
+
     const {register} = useActions();
 
     const handleRegister = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // await csrf();
-        // try {
-        //     await axios.post('/register', {
-        //         name, email, password, password_confirmation: passwordConfirmation
-        //     });
-        //     setName('');
-        //     setEmail('');
-        //     setPassword('');
-        //     setPasswordConfirmation('');
-        //     navigate('/');
-        // } catch (error) {
-        //     if (isAxiosError(error)) {
-        //         setErrors(error.response?.data.errors);
-        //     }
-        // }
         register(name, email, password, passwordConfirmation);
     }
 
@@ -80,9 +71,9 @@ const Register: React.FC<RegisterProps> = ({showComponent}) => {
                 </form>
                 <div>
                     <p className="text-base text-[#adadad] inline-block px-3"> Are you a member?</p>
-                    <span onClick={() => {showComponent('login')} }
+                    <Link to='/'
                           className="text-primary hover:underline cursor-pointer"
-                    >Login</span>
+                    >Login</Link>
                 </div>
             </>
         </Panel>

@@ -1,23 +1,27 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Panel from "../../components/Auth/Panel";
 import Input from "../../components/Auth/Input";
 import Button from "../../components/Auth/Button";
 import {useActions} from "../../hooks/use-action";
 import {useTypedSelector} from "../../hooks/use-typed-selector";
+import {Link, useBeforeUnload} from "react-router-dom";
 
-interface LoginProps {
-    showComponent: (component: string) => void
-}
 
-const Login: React.FC<LoginProps> = ({showComponent}) => {
+
+const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const {login, guestLogin} = useActions();
+    const {login, guestLogin, resetAuthErrors, getUser} = useActions();
     const errors = useTypedSelector((state) => {
         return state.auth.errors;
-    })
+    });
 
+    useEffect(() => {
+        if(errors) {
+            resetAuthErrors();
+        }
+    }, [])
 
     const handleLogin = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -40,18 +44,15 @@ const Login: React.FC<LoginProps> = ({showComponent}) => {
                     <Button type="submit">Login</Button>
 
                 </form>
-                <span onClick={() => {
-                    showComponent('forgot-password')
-                }}
+                <Link to="/forgot-password"
                       className=" mb-2 inline-block text-base text-[#adadad] hover:text-primary hover:underline cursor-pointer"
-                >Forgot Password?</span>
+                >Forgot Password?</Link>
                 <div>
                     <p className="text-base text-[#adadad] inline-block px-3"> Not a member yet?</p>
-                    <span onClick={() => {
-                        showComponent('register')
-                    }}
+                    <Link to='/register'
+
                           className="text-primary hover:underline cursor-pointer"
-                    >Sign Up</span>
+                    >Sign Up</Link>
                 </div>
                 <Button
                     type="button"

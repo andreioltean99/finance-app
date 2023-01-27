@@ -5,23 +5,18 @@ import React, {useEffect, useState} from "react";
 import AuthError from "../../components/Auth/AuthError";
 import axios, {csrf} from "../../api/axios";
 import {isAxiosError} from "axios";
+import Button from "./Button";
 
-const ResetPassword = () => {
-    const [email, setEmail] = useState('');
+interface ResetPasswordProps{
+    email: string
+}
+
+const ResetPassword: React.FC<ResetPasswordProps> = ({email}) => {
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [errors, setErrors] = useState<AuthError>({});
     const [status, setStatus] = useState(null);
-    const [searchParams] = useSearchParams();
-    const {token} = useParams();
-
-    useEffect(() => {
-        let email = '';
-        if(searchParams.get('email')){
-            email = searchParams.get('email') as string;
-        }
-        setEmail(email);
-    }, [])
+    const [token, setToken] = useState('');
 
     const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -42,13 +37,14 @@ const ResetPassword = () => {
         <Panel>
             <>
                 {status && (
-                    <div className="bg-green-700 m-2 p-2 rounded text-white block">
+                    <div className="bg-green-700 rounded text-white block">
                         {status}
-                        <Link to="/login" className="block underline py-2">Go to Login</Link>
                     </div>
                 )}
                 <div className="mb-10 text-center font-bold">Reset Password</div>
                 <form onSubmit={handleSubmit}>
+                    <Input type="email" value={email} disabled={true} className="bg-gray-200" placeholder="Email" errors={errors?.email}/>
+
                     <Input type="password" value={password} placeholder="Password" errors={errors?.password} onChange={(e) => {
                         setPassword(e.target.value)
                     }}/>
@@ -56,22 +52,18 @@ const ResetPassword = () => {
                     <Input type="password" value={passwordConfirmation} placeholder="Password Confirmation" errors={errors?.password_confirmation} onChange={(e) => {
                         setPasswordConfirmation(e.target.value)
                     }}/>
+
+                    <Input type="text" value={token} placeholder="Token" errors={errors?.token} onChange={(e) => {
+                        setToken(e.target.value)
+                    }}/>
+
                     <div className="mb-10">
-                        <button
-                            type="submit"
-                            className="w-full
-                            px-4
-                            py-3
-                            bg-indigo-500
-                            hover:bg-indigo-700
-                            rounded-md
-                            text-white
-                            "
-                        >
-                            Reset Password
-                        </button>
+                        <Button type="submit">Reset Password</Button>
                     </div>
                 </form>
+                <div>
+                    <Link className="text-base text-[#adadad] inline-block px-3 cursor-pointer" to ='/'>Back to login</Link>
+                </div>
             </>
         </Panel>
     )

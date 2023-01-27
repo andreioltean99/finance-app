@@ -1,18 +1,20 @@
 import {MdOutlineCancel} from "react-icons/md";
-import React, {useState} from "react";
+import React from "react";
 import {useActions} from "../hooks/use-action";
 import Button from "../components/Auth/Button";
 import {useTypedSelector} from "../hooks/use-typed-selector";
+import {useNavigate} from "react-router-dom";
 
 const Profile: React.FC = () => {
     const {closeExtraPage, logout} = useActions();
+    const navigate = useNavigate();
     const {guest} = useTypedSelector((state) => {
         return state.auth;
     });
 
-    let userType = 'user';
-    if(guest){
-        userType = 'guest';
+    const handleLogOut = () => {
+        logout(guest ? 'guest' : 'user');
+        navigate('/');
     }
 
     return (
@@ -24,7 +26,7 @@ const Profile: React.FC = () => {
                         <MdOutlineCancel />
                     </button>
                 </div>
-                <div className="flex-col border-t-1 border-color p-4 ml-4" onClick={() => {logout(userType)}}>
+                <div className="flex-col border-t-1 border-color p-4 ml-4" onClick={handleLogOut}>
                     <Button type="button">Log out</Button>
                 </div>
             </div>

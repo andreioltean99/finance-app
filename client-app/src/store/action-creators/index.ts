@@ -30,26 +30,32 @@ export const setCurrentPage = (currentPage: string): SetCurrentPageAction => {
 
 export const login = (email: string, password: string) => {
     return async (dispatch: Dispatch<Action>) => {
+        dispatch({
+            type: ActionType.LOGIN_PENDING
+        });
 
-        let errors = null;
-        //  await csrf();
         try {
+            await csrf();
             await axios.post('/login', {
                 email, password
             });
-            // navigate('/');
+
+            const {data} = await axios.get('/api/user');
+            dispatch({
+                type: ActionType.LOGIN_FULFILLED
+            });
+
         } catch (error) {
             if (isAxiosError(error)) {
-                errors = error.response?.data.errors;
+                let errors = error.response?.data.errors;
+
+                dispatch({
+                    type: ActionType.LOGIN_REJECTED,
+                    payload: {errors}
+                });
+
             }
         }
-
-        dispatch({
-            type: ActionType.LOGIN,
-            payload: {
-                email, password, errors
-            }
-        })
     }
 }
 
@@ -92,14 +98,42 @@ export const logout = (userType: string) => {
 
 export const getUser = () => {
     return async (dispatch: Dispatch<Action>) => {
-        const {data} = await axios.post('/api/user');
+
         dispatch({
-            type: ActionType.LOGOUT
-        })
+            type: ActionType.GET_USER_PENDING
+        });
+
+        try {
+            const {data} = await axios.get('/api/user');
+            dispatch({
+                type: ActionType.GET_USER_FULFILLED,
+                payload: {
+                    name: data.name,
+                    email: data.email,
+                    emailVerifiedAt: data.email_verified_at,
+                    createdAt: data.created_at
+                }
+            })
+        }catch (error) {
+            if (isAxiosError(error)) {
+                let errors = error.response?.data.errors;
+                dispatch({
+                    type: ActionType.GET_USER_ERROR
+                })
+            }
+        }
+
+
     }
 }
 export const guestLogin = () => {
     return {
         type: ActionType.GUEST_LOGIN,
+    }
+}
+
+export const resetAuthErrors = () => {
+    return {
+        type: ActionType.RESET_AUTH_ERRORS,
     }
 }

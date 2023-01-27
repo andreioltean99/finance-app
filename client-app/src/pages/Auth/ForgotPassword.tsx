@@ -5,12 +5,10 @@ import axios, {csrf} from "../../api/axios";
 import React, {useState} from "react";
 import AuthError from "../../components/Auth/AuthError";
 import {isAxiosError} from "axios";
+import {Link} from "react-router-dom";
+import ResetPassword from "../../components/Auth/ResetPassword";
 
-interface ForgotPasswordProps{
-    showComponent: (component: string) => void
-}
-
-const ForgotPassword: React.FC<ForgotPasswordProps> = ({showComponent}) => {
+const ForgotPassword: React.FC = () => {
     const [email, setEmail] = useState('');
     const [errors, setErrors] = useState<AuthError>({});
     const [status, setStatus] = useState(null);
@@ -30,27 +28,36 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({showComponent}) => {
         }
     }
 
+    let content = (
+        <>
+            <div className="mb-10 text-center font-bold">Forgot Password</div>
+            <form onSubmit={handleSubmit}>
+                <Input type="email" value={email} placeholder="Email" errors={errors?.email} onChange={(e) => {
+                    setEmail(e.target.value)
+                }}/>
+
+                <Button type="submit">Submit</Button>
+            </form>
+            <div>
+                <Link className="text-base text-[#adadad] inline-block px-3 cursor-pointer" to ='/'>Back to login</Link>
+            </div>
+        </>
+    );
+
+    if(status){
+        content = (
+            <>
+                <div className="bg-green-700 m-2 p-2 rounded text-white">
+                    {status}
+                </div>
+                <ResetPassword email={email} />
+            </>
+        )
+    }
+
     return (
         <Panel>
-            <>
-                {status && (
-                    <div className="bg-green-700 m-2 p-2 rounded text-white">
-                        {status}
-                    </div>
-                )}
-                <div className="mb-10 text-center font-bold">Forgot Password</div>
-                <form onSubmit={handleSubmit}>
-                    <Input type="email" value={email} placeholder="Email" errors={errors?.email} onChange={(e) => {
-                        setEmail(e.target.value)
-                    }}/>
-
-                    <Button type="submit">Submit</Button>
-                </form>
-                <div>
-                    <p className="text-base text-[#adadad] inline-block px-3 cursor-pointer" onClick={ () => {showComponent('login')} }>Back to login</p>
-
-                </div>
-            </>
+            {content}
         </Panel>
     )
 }
