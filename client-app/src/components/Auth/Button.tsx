@@ -10,7 +10,7 @@ const Button: React.FC<ButtonProps> = ({type, className, children, ...rest}) => 
     const renderedClassNames = classNames(`
     w-full
                             px-4
-                            py-3
+                            py-2
                             bg-indigo-500
                             hover:bg-indigo-700
                             rounded-md

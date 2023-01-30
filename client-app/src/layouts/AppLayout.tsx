@@ -7,12 +7,14 @@ import {Route, Routes} from "react-router-dom";
 import Settings from "../pages/Settings";
 import Profile from "../pages/Profile";
 import {useTypedSelector} from "../hooks/use-typed-selector";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Disclaimer from "../components/Disclaimer";
 import {useActions} from "../hooks/use-action";
+import AddBudgetModal from "../components/AddBudgetModal";
 
 const AppLayout = () => {
     const {getUser} = useActions();
+    const [showAddBudgetModal, setShowAddBudgetModal] = useState(true);
     const {extraPage, auth} = useTypedSelector((state) => {
         return {
             extraPage: state.app.extraPage,
@@ -36,7 +38,9 @@ const AppLayout = () => {
                         lost
                         after refreshing the page. If you want to keep your data please login with a
                         real account.</Disclaimer>
-                )}
+                )};
+
+                <AddBudgetModal show={showAddBudgetModal} handleClose={ () => setShowAddBudgetModal}/>
 
                 {extraPage === 'settings' ? <Settings/> : ''}
                 {extraPage === 'profile' ? <Profile/> : ''}

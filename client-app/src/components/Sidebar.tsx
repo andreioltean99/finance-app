@@ -15,6 +15,8 @@ const Sidebar = () => {
         return state.app.currentPage;
     });
     const {setCurrentPage} = useActions();
+    const activeClass = 'bg-indigo-500 text-white hover:text-white';
+    const inactiveClass = ' text-black';
 
     return (
         <div className="w-16 fixed sidebar dark:bg-secondary-dark-bg bg-white border-r-1 border-zinc-300">
@@ -38,7 +40,7 @@ const Sidebar = () => {
                                 className="text-slate-900"
                             >
                                 <div
-                                    className={`rounded p-3 mr-2 hover:bg-blue-200 ${currentPage === 'Portfolio' ? 'bg-blue-200' : ''}`}>
+                                    className={`rounded p-3 mr-2 hover:${activeClass} ${currentPage === 'Portfolio' ? activeClass : inactiveClass}`}>
                                     <BsWallet2 size={20}/>
                                 </div>
                             </Link>
@@ -54,7 +56,7 @@ const Sidebar = () => {
                                 }}
                             >
                                 <div
-                                    className={`rounded p-3 mr-2 hover:bg-blue-200 ${currentPage === 'Investments' ? 'bg-blue-200' : ''}`}>
+                                    className={`rounded p-3 mr-2 hover:${activeClass} ${currentPage === 'Investments' ? activeClass : inactiveClass}`}>
                                     <RiStockLine size={20}/>
                                 </div>
                             </Link>
@@ -70,7 +72,7 @@ const Sidebar = () => {
                                 }}
                             >
                                 <div
-                                    className={`rounded p-3 mr-2 hover:bg-blue-200 ${currentPage === 'Budget Planner' ? 'bg-blue-200' : ''}`}>
+                                    className={`rounded p-3 mr-2 hover:${activeClass} ${currentPage === 'Budget Planner' ? activeClass : inactiveClass}`}>
                                     <GiMoneyStack size={20}/>
                                 </div>
                             </Link>
@@ -80,7 +82,7 @@ const Sidebar = () => {
                          onClick={() => {
                              openExtraPage('settings')
                          }}>
-                        <div className="rounded p-3 hover:bg-blue-200">
+                        <div className="rounded p-3 hover:bg-indigo-500">
                             <FiSettings size={20}/>
                         </div>
                     </div>

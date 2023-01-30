@@ -1,7 +1,10 @@
 import {GoPrimitiveDot} from "react-icons/go";
-import {Sparkline} from "@syncfusion/ej2-react-charts";
 import SparkLine from "../components/Charts/SparkLine";
 import Stacked from "../components/Charts/Stacked";
+import React from "react";
+import Panel from "../components/Panel";
+import Button from "../components/Button";
+import BudgetCard from "../components/BudgetCard";
 
 const BudgetPlanner = () => {
     const stackedChartData = [
@@ -24,11 +27,39 @@ const BudgetPlanner = () => {
             {x: 'July', y: 159.9},
         ],
     ];
+    const handleClose = () => {
+
+    }
 
     return (
         <div className="mt-12">
-            <div className="flex gap-10 flex-wrap justify-center">
-                <div className="bg-white dark:text-gray-200 dark:  m-3 p-4 rounded-2xl md:w-780">
+
+            <div className="flex gap-10 inline-flex ml-80 mb-5 mt-2 px-10 min-w-full text-center">
+                <Button type="button" className="w-1/4">
+                    Add Budget
+                </Button>
+                <Button type="button" className="w-1/4 bg-red-400 hover:bg-red-600 border">
+                    Add Expense
+                </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 mx-5">
+                <div>
+                    <Panel>
+                    <BudgetCard name="Music" amount={1600} max={1500} gray />
+                </Panel>
+                </div>
+
+                <div><Panel>
+                    <div>
+
+                    </div>
+                </Panel></div>
+            </div>
+
+
+            <Panel>
+                <>
                     <div className="flex justify-between">
                         <p className="font-semibold text-xl">Revenue Updates</p>
                         <div className="flex items-center gap-4">
@@ -125,9 +156,8 @@ const BudgetPlanner = () => {
                             />
                         </div>
                     </div>
-                </div>
-
-            </div>
+                </>
+            </Panel>
         </div>
     )
 }

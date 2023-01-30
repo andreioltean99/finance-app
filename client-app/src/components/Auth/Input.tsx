@@ -3,9 +3,11 @@ import classNames from "classnames";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     type: string,
-    value: string | number,
-    placeholder: string,
+    value?: string | number,
+    placeholder?: string,
     className?: string
+    id?: string;
+    ref? : React.Ref<any>
     errors?: [],
 }
 

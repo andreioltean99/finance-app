@@ -15,6 +15,8 @@ function App() {
         window.history.replaceState(null, '', '/');
          getUser();
     }, []);
+
+
     //
     // if(auth.loading){
     //     return <div></div>
