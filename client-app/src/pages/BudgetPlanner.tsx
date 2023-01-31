@@ -5,8 +5,10 @@ import React from "react";
 import Panel from "../components/Panel";
 import Button from "../components/Button";
 import BudgetCard from "../components/BudgetCard";
+import {useActions} from "../hooks/use-action";
 
 const BudgetPlanner = () => {
+    const {openExtraPage} = useActions();
     const stackedChartData = [
         [
             {x: 'Jan', y: 111.1},
@@ -27,15 +29,11 @@ const BudgetPlanner = () => {
             {x: 'July', y: 159.9},
         ],
     ];
-    const handleClose = () => {
-
-    }
 
     return (
-        <div className="mt-12">
-
+        <>
             <div className="flex gap-10 inline-flex ml-80 mb-5 mt-2 px-10 min-w-full text-center">
-                <Button type="button" className="w-1/4">
+                <Button type="button" className="w-1/4" onClick={ () => openExtraPage('budget-modal')}>
                     Add Budget
                 </Button>
                 <Button type="button" className="w-1/4 bg-red-400 hover:bg-red-600 border">
@@ -158,7 +156,7 @@ const BudgetPlanner = () => {
                     </div>
                 </>
             </Panel>
-        </div>
+        </>
     )
 }
 

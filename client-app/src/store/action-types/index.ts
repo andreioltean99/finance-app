@@ -11,5 +11,5 @@ export enum ActionType{
     GET_USER_PENDING = 'get_user_pending',
     GET_USER_FULFILLED = 'get_user_fulfilled',
     GET_USER_ERROR = 'get_user_error',
-    RESET_AUTH_ERRORS = 'reset_auth_errors'
+    RESET_AUTH_ERRORS = 'reset_auth_errors',
 }

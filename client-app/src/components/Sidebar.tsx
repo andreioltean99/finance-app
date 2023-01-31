@@ -1,22 +1,21 @@
-import {Link, NavLink, useSearchParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {BsWallet2} from "react-icons/bs";
 import {AiOutlineStock} from "react-icons/ai";
 import {RiStockLine} from "react-icons/ri";
 import {GiMoneyStack} from "react-icons/gi";
-import React, {useState} from "react";
+import React from "react";
 import {FiSettings} from "react-icons/fi";
 import {useActions} from "../hooks/use-action";
 import {useTypedSelector} from "../hooks/use-typed-selector";
 
 const Sidebar = () => {
-    const [searchParams] = useSearchParams();
     const {openExtraPage} = useActions();
     const currentPage = useTypedSelector((state) => {
         return state.app.currentPage;
     });
     const {setCurrentPage} = useActions();
     const activeClass = 'bg-indigo-500 text-white hover:text-white';
-    const inactiveClass = ' text-black';
+    const inactiveClass = 'text-slate-900';
 
     return (
         <div className="w-16 fixed sidebar dark:bg-secondary-dark-bg bg-white border-r-1 border-zinc-300">

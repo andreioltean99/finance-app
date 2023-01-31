@@ -1,9 +1,5 @@
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import Investments from "../pages/Investments";
-import BudgetPlanner from "../pages/BudgetPlanner";
-import Portfolio from "../pages/Portfolio";
-import {Route, Routes} from "react-router-dom";
 import Settings from "../pages/Settings";
 import Profile from "../pages/Profile";
 import {useTypedSelector} from "../hooks/use-typed-selector";
@@ -11,10 +7,11 @@ import React, {useEffect, useState} from "react";
 import Disclaimer from "../components/Disclaimer";
 import {useActions} from "../hooks/use-action";
 import AddBudgetModal from "../components/AddBudgetModal";
+import ContentArea from "../components/ContentArea";
 
 const AppLayout = () => {
     const {getUser} = useActions();
-    const [showAddBudgetModal, setShowAddBudgetModal] = useState(true);
+    const [showDisclaimer, setShowDisclaimer] = useState(false);
     const {extraPage, auth} = useTypedSelector((state) => {
         return {
             extraPage: state.app.extraPage,
@@ -25,31 +22,38 @@ const AppLayout = () => {
     useEffect( () => {
         if(auth.user && Object.keys(auth.user).length === 0) {
             getUser();
+        }else{
+            setShowDisclaimer(true);
+                 setTimeout(() => {
+                   setShowDisclaimer(false);
+                }, 7000);
         }
     }, []);
+
+    const renderExtraPage = () => {
+        switch (extraPage){
+            case 'settings':
+                return <Settings />
+            case 'profile':
+                return <Profile />;
+            case 'budget-modal':
+                return <AddBudgetModal />
+        }
+    }
 
     return (
         <div className="flex relative dark:bg-main-dark-bg">
             <Sidebar/>
             <div className="dark:bg-main-bg bg-main-bg min-h-screen w-full ml-12 flex-2">
                 <Navbar/>
-                {!auth.user && (
+                {showDisclaimer && (
                     <Disclaimer> You are using a GUEST account. Please notice that your modifications will be
                         lost
                         after refreshing the page. If you want to keep your data please login with a
                         real account.</Disclaimer>
                 )};
-
-                <AddBudgetModal show={showAddBudgetModal} handleClose={ () => setShowAddBudgetModal}/>
-
-                {extraPage === 'settings' ? <Settings/> : ''}
-                {extraPage === 'profile' ? <Profile/> : ''}
-                <Routes>
-                    <Route path="/" element={<Portfolio/>}/>
-                    <Route path="/investments" element={<Investments/>}/>
-                    <Route path="/budget-planner" element={<BudgetPlanner/>}/>
-                    <Route path="/profile" element={<Profile/>}/>
-                </Routes>
+                {renderExtraPage()}
+                <ContentArea />
             </div>
         </div>
     )

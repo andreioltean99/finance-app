@@ -1,70 +1,47 @@
-// import produce from 'immer';
-// import {ActionType} from "../action-types";
-// import {Action} from '../actions';
-// import { v4 as uuidV4 } from 'uuid';
-//
-// export const appInitialState = {
-//    budgets: [],
-//     expenses: [],
-//
-// }
-//
-// /*
-// budgets [{
-// id:
-// name:
-// max:
-// }]
-//
-// expense: [{
-// id:
-// budgetId:
-// amount:
-// description:
-// }]
-//  */
-//
-// // getBudgetsExpenses
-// function getBudgetExpenses(budgetId: string){
-// return expenses.filter(expense => expense.budgetId === budgetId)
-// }
-//
-// // addExpense
-// function addExpense(description: string, amount: number, budgetid){
-//      setBudgets(prevBudgets => {
-//          return [...prevBudgets, {id: uuidV4(), description, amount, budgetId }]
-//      });
-// }
-// // adBudget
-// function addExpense(name: string, max: number){
-//     setBudgets(prevBudgets => {
-//         if(prevBudgets.find(budget => budget.name === name)){
-//             return prevBudgets;
-//         }
-//         return [...prevBudgets, {id: uuidV4(), name, max }]
-//     });
-// }
-// // deleteBudget
-// function deleteBudget(id){
-//     setBudgets(prevBudgets => {
-//         return prevBudgets.filter(budget => budget.id !== id)
-//     })
-// }
-// // deleteExpense
-// function deleteExpense(id){
-//     setBudgets(prevBudgets => {
-//         return prevBudgets.filter(budget => budget.id !== id)
-//     })
-// }
-//
-// const reducer = produce(
-//     (state = appInitialState, action: Action) => {
-//         switch(action.type){
-//             default:
-//                 return state;
-//         }
-//     }
-// )
-//
-// export default reducer;
-export default 1;
+import produce from 'immer';
+import {ActionType} from "../action-types/budget-types";
+import {Action} from '../actions/budget-actions';
+import Budget from "../types/Budget";
+import Expense from "../types/Expense";
+import { v4 as uuid } from 'uuid';
+
+interface budgetInitialState {
+    budgets: Budget[] | [],
+    expenses: Expense[] | [],
+}
+
+export const budgetInitialState: budgetInitialState = {
+    budgets: [],
+    expenses: [],
+}
+
+const reducer = produce(
+    (state = budgetInitialState, action: Action) => {
+        switch (action.type) {
+            case ActionType.GET_BUDGET_EXPENSES:
+                state.expenses.filter((expense: { budgetId: string; }) => expense.budgetId === action.payload.budgetId)
+                return state;
+            case ActionType.ADD_BUDGET:
+                state.budgets = [...state.budgets, {id: uuid(), name: action.payload.name, max: action.payload.max}]
+                return state;
+            case ActionType.ADD_EXPENSE:
+                state.expenses = [...state.expenses, {
+                    id: uuid(),
+                    description: action.payload.description,
+                    amount: action.payload.amount,
+                    budgetId: action.payload.budgetId
+                }];
+                return state;
+            case ActionType.DELETE_BUDGET:
+                state.budgets = state.budgets.filter((budget: { id: string; }) => budget.id !== action.payload.budgetId)
+                return state;
+            case ActionType.DELETE_EXPENSE:
+                state.expenses = state.expenses.filter((expense: { id: string; }) => expense.id !== action.payload.expenseId)
+                return state;
+            default:
+                return state;
+        }
+    }
+)
+
+export default reducer;
