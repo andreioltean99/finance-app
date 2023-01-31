@@ -18,10 +18,16 @@ export const getBudgetExpenses = (budgetId: string): GetBudgetExpensesAction => 
     }
 }
 
-export const addBudget = (name: string, max: number): AddBudgetAction => {
-    return {
-        type: ActionType.ADD_BUDGET,
-        payload: {name, max}
+export const addBudget = (userId: string | null, name: string, max: number) => {
+    return async (dispatch: Dispatch<Action>) => {
+        if (userId) {
+            await axios.post('/api/budgets', {userId, name, max});
+        }
+
+        dispatch({
+            type: ActionType.ADD_BUDGET,
+            payload: {name, max}
+        });
     }
 }
 

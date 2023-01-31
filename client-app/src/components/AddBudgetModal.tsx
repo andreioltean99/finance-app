@@ -3,15 +3,20 @@ import {useActions} from "../hooks/use-action";
 import Input from "./Auth/Input";
 import Button from "./Auth/Button";
 import CloseExtraPage from "./CloseExtraPage";
+import {useTypedSelector} from "../hooks/use-typed-selector";
 
 const AddBudgetModal: React.FC = () => {
     const [name, setName] = useState('');
     const [max, setMax] = useState('');
-    const {addBudget, closeExtraPage} = useActions()
+    const {addBudget, closeExtraPage} = useActions();
+
+    const user = useTypedSelector((state) => {
+        return state.auth.user;
+    });
 
     const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        addBudget(name, parseFloat(max));
+        addBudget(user?.id, name, parseFloat(max));
         setName('');
         setMax('');
         closeExtraPage();
