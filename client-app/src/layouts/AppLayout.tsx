@@ -8,9 +8,10 @@ import Disclaimer from "../components/Disclaimer";
 import {useActions} from "../hooks/use-action";
 import AddBudgetModal from "../components/AddBudgetModal";
 import ContentArea from "../components/ContentArea";
+import AddExpenseModal from "../components/AddExpenseModal";
 
 const AppLayout = () => {
-    const {getUser} = useActions();
+    const {getUser, getBudgetsAndExpenses} = useActions();
     const [showDisclaimer, setShowDisclaimer] = useState(false);
     const {extraPage, auth} = useTypedSelector((state) => {
         return {
@@ -20,8 +21,9 @@ const AppLayout = () => {
     });
 
     useEffect( () => {
-        if(auth.user && Object.keys(auth.user).length === 0) {
+        if(auth.user && Object.keys(auth.user).length != 0) {
             getUser();
+            getBudgetsAndExpenses();
         }else{
             setShowDisclaimer(true);
                  setTimeout(() => {
@@ -36,6 +38,8 @@ const AppLayout = () => {
                 return <Settings />
             case 'profile':
                 return <Profile />;
+            case 'expense-modal':
+                return <AddExpenseModal />
             case 'budget-modal':
                 return <AddBudgetModal />
         }

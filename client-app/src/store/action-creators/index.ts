@@ -108,6 +108,7 @@ export const getUser = () => {
             dispatch({
                 type: ActionType.GET_USER_FULFILLED,
                 payload: {
+                    id: data.id,
                     name: data.name,
                     email: data.email,
                     emailVerifiedAt: data.email_verified_at,

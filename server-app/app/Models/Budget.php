@@ -9,6 +9,13 @@ class Budget extends Model
 {
     use HasFactory;
 
+    public mixed $id;
+    /**
+     * @var int|mixed|string|null
+     */
+    public mixed $user_id;
+    public mixed $name;
+    public mixed $max;
     protected $table = 'budgets';
 
     /**
@@ -21,4 +28,12 @@ class Budget extends Model
         'name',
         'max',
     ];
+    protected $casts = [
+        'id' => 'string'
+    ];
+
+    public function expenses(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany("App\Models\Expense");
+    }
 }

@@ -37,14 +37,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({name, amount, max, gray}) => {
                 <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
                     <div className={`${getProgressBarVariant(amount, max)} h-2.5 rounded-full`} style={{width: `${progressBarValue}%`}}></div>
                 </div>
-                <div className="flex flex-row-reverse gap-2 mt-4">
-                    <Button type="button" className="bg-gray-50 text-black border-slate-700">
-                        Add Expense
-                    </Button>
-                    <Button type="button" className="bg-gray-50 text-black border-slate-400">
-                        View Expenses
-                    </Button>
-                </div>
+
             </div>
         </div>
     )

@@ -4,37 +4,82 @@ import {
     AddBudgetAction,
     AddExpenseAction,
     DeleteBudgetAction, DeleteExpenseAction,
-    GetBudgetExpensesAction,
 } from "../actions/budget-actions";
 import {Dispatch} from "redux";
 import axios, {csrf} from "../../api/axios";
 import {isAxiosError} from "axios";
+import {v4 as uuid} from 'uuid';
+import Expense from "../types/Expense";
+import Budget from "../types/Budget";
 
+export const getBudgetsAndExpenses = () => {
+    return async (dispatch: Dispatch<Action>) => {
+        const {data} = await axios.get('/api/budget');
 
-export const getBudgetExpenses = (budgetId: string): GetBudgetExpensesAction => {
-    return {
-        type: ActionType.GET_BUDGET_EXPENSES,
-        payload: {budgetId}
+        let budgets: Budget[] = [];
+        let expenses: Expense[] = [];
+
+        data.forEach((element: any) => {
+            budgets.push({
+                id: element.id,
+                name: element.name,
+                max: element.max
+            })
+            if(element.expenses.length){
+                element.expenses.forEach((expense: { id: any; budget_id: any; amount: any; description: any; }) => {
+                    expenses.push({
+                        id: expense.id,
+                        budgetId: expense.budget_id,
+                        amount: expense.amount,
+                        description: expense.description
+                    });
+                })
+            }
+        })
+
+        dispatch({
+            type: ActionType.GET_BUDGETS_AND_EXPENSES,
+            payload: {
+                budgets, expenses
+            }
+        })
     }
 }
 
+
 export const addBudget = (userId: string | null, name: string, max: number) => {
     return async (dispatch: Dispatch<Action>) => {
+        const generatedId = uuid();
         if (userId) {
-            await axios.post('/api/budgets', {userId, name, max});
+            await axios.post('/api/budget', {
+                id: generatedId,
+                name: name,
+                max: max
+            });
         }
 
         dispatch({
             type: ActionType.ADD_BUDGET,
-            payload: {name, max}
+            payload: {id: generatedId, name, max}
         });
     }
 }
 
-export const addExpense = (budgetId: string, description: string, amount: number): AddExpenseAction => {
-    return {
-        type: ActionType.ADD_EXPENSE,
-        payload: {budgetId, description, amount}
+export const addExpense = (userId: string, budgetId: string, description: string, amount: number)=> {
+    return async (dispatch: Dispatch<Action>) => {
+        const generatedId = uuid();
+        if (userId) {
+            await axios.post('/api/expense', {
+                id: generatedId,
+                budget_id: budgetId,
+                description, amount
+            });
+        }
+
+        dispatch({
+            type: ActionType.ADD_EXPENSE,
+            payload: {id: generatedId, budgetId, description, amount}
+        })
     }
 }
 

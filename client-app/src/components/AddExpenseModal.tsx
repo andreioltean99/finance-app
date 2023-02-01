@@ -5,20 +5,24 @@ import Button from "./Auth/Button";
 import CloseExtraPage from "./CloseExtraPage";
 import {useTypedSelector} from "../hooks/use-typed-selector";
 
-const AddBudgetModal: React.FC = () => {
-    const [name, setName] = useState('');
-    const [max, setMax] = useState('');
-    const {addBudget, closeExtraPage} = useActions();
-
-    const user = useTypedSelector((state) => {
-        return state.auth.user;
+const AddExpenseModal: React.FC = () => {
+    const {budgets, user} = useTypedSelector((state) => {
+        return {
+            budgets: state.budget.budgets,
+            user: state.auth.user
+        };
     });
+
+    const [description, setDescription] = useState('');
+    const [amount, setAmount] = useState('');
+    const [budgetId, setBudgetId] = useState(budgets[0].id);
+    const {addExpense, closeExtraPage} = useActions();
+
+
 
     const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        addBudget(user?.id, name, parseFloat(max));
-        setName('');
-        setMax('');
+        addExpense(user?.id, budgetId, description, parseFloat(amount));
         closeExtraPage();
     }
     return (
@@ -31,19 +35,30 @@ const AddBudgetModal: React.FC = () => {
 
                         <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                New Budget
+                                New Expense
                             </h3>
                             <CloseExtraPage />
                         </div>
                         <form onSubmit={handleSubmit}>
                             <div className="p-6 space-y-6">
-                                <label htmlFor="name">Name</label>
-                                <Input type="text" id="name" value={name} onChange={e => setName(e.target.value)}
+                                <label htmlFor="description">Description</label>
+                                <Input type="text" id="description" value={description} onChange={e => setDescription(e.target.value)}
                                        required/>
 
-                                <label htmlFor="max">Maximum Spending</label>
-                                <Input type="number" min={0} step={0.1} id="max" value={max}
-                                       onChange={e => setMax(e.target.value)} required/>
+                                <label htmlFor="amount">Maximum Spending</label>
+                                <Input type="number" min={0} step={0.1} id="amount" value={amount}
+                                       onChange={e => setAmount(e.target.value)} required/>
+
+                                <select value={budgetId} onChange={(e) => {setBudgetId(e.target.value)} }>
+                                    {
+                                        budgets.map((budget: { id: React.Key |string; name: string; }) => {
+                                            return (
+                                                <option key={budget.id} value={budget.id}>{budget.name}</option>
+                                            )
+                                        })
+                                    }
+
+                                </select>
                             </div>
                             <div
                                 className="flex flex-row-reverse p-6  border-t border-gray-200 rounded-b dark:border-gray-600 ">
@@ -57,4 +72,4 @@ const AddBudgetModal: React.FC = () => {
     )
 }
 
-export default AddBudgetModal;
+export default AddExpenseModal;

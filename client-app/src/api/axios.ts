@@ -3,6 +3,7 @@ import axios from 'axios';
 export default axios.create({
     baseURL: "http://localhost:80",
     headers: {
+        'Accept':'application.json',
         'X-Requested-With': 'XMLHttpRequest',
     },
     withCredentials: true,

@@ -1,5 +1,5 @@
 export enum ActionType{
-    GET_BUDGET_EXPENSES = 'get-budget-expenses',
+    GET_BUDGETS_AND_EXPENSES = 'get-budgets-and-expenses',
     ADD_BUDGET = 'add_budget',
     ADD_EXPENSE = 'add_expense',
     DELETE_BUDGET = 'delete_budget',

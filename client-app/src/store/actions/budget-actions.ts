@@ -1,15 +1,19 @@
 import {ActionType} from "../action-types/budget-types";
+import Budget from "../types/Budget";
+import Expense from "../types/Expense";
 
-export interface GetBudgetExpensesAction {
-    type: ActionType.GET_BUDGET_EXPENSES;
+export interface GetBudgetsAndExpensesAction {
+    type: ActionType.GET_BUDGETS_AND_EXPENSES;
     payload: {
-        budgetId: string
+       budgets: Budget[] | [];
+       expenses: Expense[] | [];
     }
 }
 
 export interface AddBudgetAction {
     type: ActionType.ADD_BUDGET;
     payload: {
+        id: string;
         name: string;
         max: number;
     }
@@ -18,7 +22,8 @@ export interface AddBudgetAction {
 export interface AddExpenseAction {
     type: ActionType.ADD_EXPENSE;
     payload: {
-        budgetId: string
+        id: string;
+        budgetId: string;
         description: string;
         amount: number;
     }
@@ -41,10 +46,9 @@ export interface DeleteExpenseAction {
 
 
 export type Action =
-    GetBudgetExpensesAction
-    | AddBudgetAction
+     AddBudgetAction
     | AddExpenseAction
     | DeleteBudgetAction
     | DeleteExpenseAction
-
+    | GetBudgetsAndExpensesAction
     ;
